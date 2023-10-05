@@ -6,9 +6,9 @@ ARCH=$(uname -m)
 # Define the architecture to filename pattern mapping
 declare -A ARCH_MAPPING
 ARCH_MAPPING=(
-    ["x86_64"]="x64"
-    ["aarch64"]="arm64"
-    # Add more mappings as needed
+  ["x86_64"]="x64"
+  ["aarch64"]="arm64"
+  # Add more mappings as needed
 )
 
 # Check if the architecture exists in the mapping
@@ -40,21 +40,22 @@ DEST_FILE="/tmp/$(basename $DOWNLOAD_URL)"
 # Download the binary to /tmp
 curl -L -o "$DEST_FILE" "$DOWNLOAD_URL"
 
+OUTPUT_DIR=$(realpath "${1:-$HOME/balena-cli}")
+
 # Check if the download was successful
 if [ $? -eq 0 ]; then
   echo "Download successful. Saved as $DEST_FILE"
 
-  # Unzip the downloaded file to ~
-  mkdir -p ~
-  unzip -q -d ~ "$DEST_FILE"
-  echo "Unzipped to ~"
+  # Unzip the file
+  unzip -q -d "/tmp" "$DEST_FILE"
+  mv "/tmp/balena-cli" "$OUTPUT_DIR"
+  echo "Unzipped to $OUTPUT_DIR"
 else
   echo "Download failed."
   exit 1
 fi
 
 # Add ~/balena-cli to your PATH.
-echo 'export PATH="$PATH:$HOME/balena-cli"' >> ~/.bashrc
-source ~/.bashrc
+echo "export PATH=\$PATH:$OUTPUT_DIR" >>~/.bashrc
 
 echo "Successfully installed balena-cli, please restart your terminal."
