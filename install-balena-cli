@@ -26,11 +26,11 @@ echo "ARCH_PATTERN: $ARCH_PATTERN"
 GITHUB_RELEASE_URL="https://api.github.com/repos/balena-io/balena-cli/releases/latest"
 
 # Parse the JSON response to get the download URL for the specific architecture
-DOWNLOAD_URL=$(curl -s $GITHUB_RELEASE_URL | jq -r ".assets[] | select(.name | contains(\"balena-cli-v17.1.4-linux-$ARCH_PATTERN-standalone.zip\")) | .browser_download_url")
+DOWNLOAD_URL=$(curl -s $GITHUB_RELEASE_URL | jq -r ".assets[] | select(.name | contains(\"linux-$ARCH_PATTERN-standalone.zip\")) .browser_download_url")
 
 # Check if the download URL is empty
 if [ -z "$DOWNLOAD_URL" ]; then
-  echo "No download URL found for the architecture: $ARCH"
+  echo "No download URL found for the architecture: $ARCH_PATTERN"
   exit 1
 fi
 
